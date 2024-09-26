@@ -11,7 +11,7 @@ Homepage: https://gitee.com/GXDE-OS/aptss/
 Package: aptss
 Architecture: all
 Multi-Arch: foreign
-Depends: ${misc:Depends}, ${shlibs:Depends},wget,aria2,curl
+Depends: ${misc:Depends}, ${shlibs:Depends},wget,aria2,curl,gnupg
 Provides: spark-store,spark-store-console
 Conflicts: spark-store,spark-store-console
 Description: aptss

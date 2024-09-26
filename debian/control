@@ -14,5 +14,4 @@ Multi-Arch: foreign
 Depends: ${misc:Depends}, ${shlibs:Depends},wget,aria2
 Provides: spark-store,spark-store-console
 Conflicts: spark-store,spark-store-console
-
 Description: aptss

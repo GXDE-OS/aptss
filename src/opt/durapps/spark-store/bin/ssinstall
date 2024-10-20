@@ -3,6 +3,7 @@
 source /opt/durapps/spark-store/bin/bashimport/transhell.amber
 load_transhell_debug
 
+trap 'unlock_file $DEBPATH' EXIT
 case $(arch) in
    x86_64)
 	STORE_URL="store"
@@ -60,7 +61,7 @@ function zenity() {
 function hash_check() {
     if [ ! -e "/var/lib/aptss/lists/d.spark-app.store_${STORE_URL}_Packages" ] && \
        [ ! -e "/var/lib/aptss/lists/d.store.deepinos.org.cn_${STORE_URL}_Packages" ] && \
-       [ ! -e "/var/lib/aptss/lists/mirrors.sdu.edu.cn_spark-store-repository_${STORE_URL}_Packages" ]; then
+       [ ! -e "/var/lib/aptss/lists/mirrors.sdu.edu.cn_spark-store_${STORE_URL}_Packages" ]; then
         echo "接收星火仓库软件信息中..."
         aptss ssupdate
     fi
@@ -164,7 +165,8 @@ if [ ! -z "$IS_SHA512SUM_CHECKED" ]; then
         exit "$try_run_ret"
     fi
 
-    dpkg --force-conflicts -i "$DEBPATH" || aptss install $DEBPATH -yf
+    dpkg --force-conflicts -i "$DEBPATH"
+    aptss install "$DEBPATH" -yf
 
 unlock_file "$DEBPATH"
 

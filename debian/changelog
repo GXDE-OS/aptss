@@ -1,7 +1,8 @@
-aptss (4.3.2.3) UNRELEASED; urgency=medium
+aptss (4.3.3-fix1) UNRELEASED; urgency=medium
 
   * 提升aptss稳定性
   * 支持安装dummyapp
   * 修复 aptss policy / aptss search 需要root的问题
+  * Sync: spark-store 433f1
 
  -- shenmo <shenmo@spark-app.store>  Tue, 24 Sep 2024 00:32:58 +0800

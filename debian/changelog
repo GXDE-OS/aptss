@@ -1,4 +1,4 @@
-aptss (4.3.3.1-fix2) UNRELEASED; urgency=medium
+aptss (4.3.3.1-fix3) UNRELEASED; urgency=medium
 
   * 提升aptss稳定性
   * 支持安装dummyapp

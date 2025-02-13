@@ -1,3 +1,10 @@
+aptss (4.4.0) UNRELEASED; urgency=medium
+
+  * 支持fish自动补全
+
+ -- shenmo <shenmo@spark-app.store>  Tue, 24 Sep 2024 00:32:58 +0800
+
+
 aptss (4.3.3.2-1) UNRELEASED; urgency=medium
 
   * 提升aptss稳定性

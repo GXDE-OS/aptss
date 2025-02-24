@@ -404,6 +404,7 @@ get_uris(){
     if ! mkdir -p -- "$(dirname "$DLLIST")"
     then
       msg "Could not create download file directory." "warning"
+      msg "无法创建下载目录" "warning"
       CLEANUP_STATE=1
       exit
     fi
@@ -411,6 +412,7 @@ get_uris(){
     if ! rm -f -- "$DLLIST" 2>/dev/null && ! touch -- "$DLLIST" 2>/dev/null
     then
       msg "Unable to write to download file. Try restarting with root permissions or run 'apt-fast clean' first." "warning"
+      msg "无法下载文件。尝试使用root权限，或者运行 'aptss clean'" "warning"
       CLEANUP_STATE=1
       exit
     fi
@@ -428,12 +430,15 @@ get_uris(){
   CLEANUP_STATE="$?"
   if [ "$CLEANUP_STATE" -ne 0 ]
   then
-    msg "Package manager quit with exit code." "warning"
-    exit
+    msg "Package manager quit with exit code.Here is the log" "warning"
+    msg "包管理器以错误代码退出.日志如下" "warning"
+    msg "${uris_full}"
+    exit"$CLEANUP_STATE"
   fi
   prepare_auth
  local tmpdir=$(mktemp -d) || {
     msg "Failed to create tmp dir" "warning"
+    msg "无法创建临时目录" "warning"
     exit 1
   }
   ## --print-uris format is:
@@ -441,7 +446,7 @@ get_uris(){
   process_package() {
     local pkg_uri_info="$@"
 
-    local display_line=""
+    local display_line=""   # 添加局部变量并初始化为空
 
     IFS=' ' read -r uri filename filesize checksum_string _ <<<"$pkg_uri_info"
     [ -z "$uri" ] && continue

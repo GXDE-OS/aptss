@@ -1,3 +1,9 @@
+aptss (4.6.3) UNRELEASED; urgency=medium
+
+  * aptss 第三阶段性能优化 @Rongrong
+
+ -- shenmo <shenmo@spark-app.store>  Tue, 24 Sep 2024 00:32:58 +0800
+
 aptss (4.6.0) UNRELEASED; urgency=medium
 
   * 支持fish自动补全

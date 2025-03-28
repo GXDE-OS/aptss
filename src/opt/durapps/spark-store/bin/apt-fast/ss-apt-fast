@@ -598,10 +598,10 @@ display_downloadfile(){
     while IFS=' ' read -r pkg ver size _; do
         [ -z "$pkg" ] && continue
         printf '%s%-40s %-20s %10s\n' "$aptfast_prefix" "$pkg" "$ver" "$size"
-    done <<<"$(echo -e "$DOWNLOAD_DISPLAY" | sort "${DISPLAY_SORT_OPTIONS[@]}" | numfmt "${DISPLAY_NUMFMT_OPTIONS[@]}" --field=3)"
+    done <<<"$(echo -e "$DOWNLOAD_DISPLAY" | sort "${DISPLAY_SORT_OPTIONS[@]}" | numfmt --to=iec-i --suffix=B --field=3)"
   fi
-  msg "Download size: $(echo "$DOWNLOAD_SIZE" | numfmt "${DISPLAY_NUMFMT_OPTIONS[@]}")" "normal"
-  msg "下载大小: $(echo "$DOWNLOAD_SIZE" | numfmt "${DISPLAY_NUMFMT_OPTIONS[@]}")" "normal"
+  msg "Download size: $(echo "$DOWNLOAD_SIZE" | numfmt --to=iec-i --suffix=B)" "normal"
+  msg "下载大小: $(echo "$DOWNLOAD_SIZE" | numfmt --to=iec-i --suffix=B)" "normal"
 }
 
 

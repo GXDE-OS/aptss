@@ -1,6 +1,7 @@
-aptss (4.6.3) UNRELEASED; urgency=medium
+aptss (4.6.4) UNRELEASED; urgency=medium
 
   * aptss 第三阶段性能优化 @Rongrong
+  * 支持i686
 
  -- shenmo <shenmo@spark-app.store>  Tue, 24 Sep 2024 00:32:58 +0800
 

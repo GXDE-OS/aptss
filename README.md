@@ -24,3 +24,5 @@ done
 
 
 ```
+
+配置文件内容请参考 `/tmp/apt-fast.conf`

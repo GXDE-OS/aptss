@@ -20,6 +20,13 @@ shopt -s nullglob
 # third argument are piped to stderr.
 
 THREADS=$(nproc 2>/dev/null || echo 4)
+
+# Set color variables.
+cGreen='\e[0;32m'
+cRed='\e[0;31m'
+cBlue='\e[0;34m'
+endColor='\e[0m'
+
 msg(){
   msg_options=()
   case "$2" in
@@ -36,7 +43,19 @@ msg(){
     echo -e "${msg_options[@]}" "${aptfast_prefix}${beginColor}$1${endColor}" >&2
   fi
 }
+msg_already_running()
+{
+  msg "Other aptss is running.  Waited $timer senconds..." "normal"
+  msg "有其他的aptss正在运行。已经等待了$timer秒" "normal"
+}
 
+# Check if a lock file exists.
+#if [ -f "$LCK_FILE.lock" ]; then
+#  msg_already_running
+#  exit 1
+#fi
+
+LCK_FD=99
 # create the lock file and lock it, die on failure
 _create_lock()
 {
@@ -156,7 +175,7 @@ LCK_FILE="/tmp/apt-fast-in-container.lock"
 else
 LCK_FILE="/tmp/apt-fast.lock"
 fi
-LCK_FD=99
+
 
 # Set default package manager, APT cache, temporary download dir,
 # temporary download list file, and maximal parallel downloads
@@ -196,11 +215,7 @@ MIRRORS=()
 aptfast_prefix=
 # aptfast_prefix="$(date '+%b %_d %T.%N') apt-fast: "
 
-# Set color variables.
-cGreen='\e[0;32m'
-cRed='\e[0;31m'
-cBlue='\e[0;34m'
-endColor='\e[0m'
+
 
 # Set timout value for apt-fast download confirmation dialog.
 # Value is in seconds.
@@ -271,18 +286,6 @@ if [ ! -t 1 ]; then
   [ -z "$aptfast_prefix" ] && aptfast_prefix="[apt-fast $(date +"%T")]"
 fi
 
-
-msg_already_running()
-{
-  msg "Other aptss is running.  Waited $timer senconds..." "normal"
-  msg "有其他的aptss正在运行。已经等待了$timer秒" "normal"
-}
-
-# Check if a lock file exists.
-#if [ -f "$LCK_FILE.lock" ]; then
-#  msg_already_running
-#  exit 1
-#fi
 
 
 

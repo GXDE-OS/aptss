@@ -37,6 +37,39 @@ msg(){
   fi
 }
 
+# create the lock file and lock it, die on failure
+_create_lock()
+{
+    eval "exec $LCK_FD>\"$LCK_FILE.lock\""
+
+    # 设置 trap 来清理资源
+    trap "cleanup_aptfast" EXIT
+    trap "cleanup_aptfast; exit 1" INT TERM
+
+    timer=0
+    max_wait=180  # 最大等待时间为180秒（3分钟）
+
+    until $(flock -xn $LCK_FD); do
+        msg_already_running
+        sleep 1
+        let timer+=1
+
+        if [ $timer -ge $max_wait ]; then
+            echo "timeout"
+            exit 1
+        fi
+    done
+
+    unset timer
+}
+
+# unlock and remove the lock file
+_remove_lock()
+{
+    flock -u "$LCK_FD" 2>/dev/null
+    rm -f "$LCK_FILE.lock"
+}
+
 # Search for known options and decide if root privileges are needed.
 root=$#
 option=
@@ -252,38 +285,6 @@ msg_already_running()
 #fi
 
 
-# create the lock file and lock it, die on failure
-_create_lock()
-{
-    eval "exec $LCK_FD>\"$LCK_FILE.lock\""
-
-    # 设置 trap 来清理资源
-    trap "cleanup_aptfast" EXIT
-    trap "cleanup_aptfast; exit 1" INT TERM
-
-    timer=0
-    max_wait=180  # 最大等待时间为180秒（3分钟）
-
-    until $(flock -xn $LCK_FD); do
-        msg_already_running
-        sleep 1
-        let timer+=1
-
-        if [ $timer -ge $max_wait ]; then
-            echo "timeout"
-            exit 1
-        fi
-    done
-
-    unset timer
-}
-
-# unlock and remove the lock file
-_remove_lock()
-{
-    flock -u "$LCK_FD" 2>/dev/null
-    rm -f "$LCK_FILE.lock"
-}
 
 # Move download file away so missing permissions won't stop usage.
 CLEANUP_STATE=0

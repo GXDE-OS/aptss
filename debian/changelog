@@ -1,7 +1,8 @@
-aptss (4.8.0-1) UNRELEASED; urgency=medium
+aptss (4.8.1) UNRELEASED; urgency=medium
 
   * 同步星火4.8.0
   * 支持riscv
+  * 支持在安装应用的同时下载应用
 
  -- shenmo <shenmo@spark-app.store>  Tue, 24 Sep 2024 00:32:58 +0800
 

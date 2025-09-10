@@ -25,4 +25,4 @@ done
 
 ```
 
-配置文件内容请参考 `/tmp/apt-fast.conf`
+配置文件内容请参考 `/tmp/aptss-conf/apt-fast.conf`

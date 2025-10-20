@@ -54,8 +54,7 @@ case "$1" in
 		rm -rf /tmp/spark-store-install
 
         
-        # Remove old sparkstore source
-        rm -fv /opt/durapps/spark-store/bin/apt-fast-conf/sources.list.d/sparkstore.list
+
 	;;
 
 	triggered)

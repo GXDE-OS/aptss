@@ -114,7 +114,7 @@ fi
 
 
 
-if  [ "$1" = "install" ] || [ "$1" = "upgrade" ] || [ "$1" = "full-upgrade" ] || [ "$1" = "dist-upgrade" ]; then
+if  [ "$1" = "install" ] || [ "$1" = "upgrade" ] || [ "$1" = "full-upgrade" ] || [ "$1" = "reinstall" ] || [ "$1" = "dist-upgrade" ]; then
 
 
 

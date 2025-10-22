@@ -1,4 +1,4 @@
-aptss (4.8.3) UNRELEASED; urgency=medium
+aptss (4.8.3-1) UNRELEASED; urgency=medium
 
   * 同步星火4.8.0
   * 支持riscv

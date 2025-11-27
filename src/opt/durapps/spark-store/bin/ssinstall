@@ -61,7 +61,7 @@ export DEBIAN_FRONTEND=noninteractive
 # 根据架构设置仓库URL
 if [[ "$IS_APM_ENV" = "" ]] ;then
 case $(arch) in
-   x86_64 | i686 | i386)
+  x86_64 | i686 | i386)
 	STORE_URL="store"
 	STORE_LIST_URL=""
 	;;
@@ -236,19 +236,40 @@ function ensure_aptss_exist() {
 export -f ensure_aptss_exist
 
 # 确保ACE环境存在
+# 确保ACE环境存在
 function ensure_ace_env() {
     local ace_env_pkg="${1}"
-    
-    if ! dpkg -l "$ace_env_pkg" &>/dev/null; then
-        echo "ACE环境$ace_env_pkg未安装，正在尝试安装..."
-        zenity --info --text="首次使用$ace_env_pkg环境，重启或注销桌面后才能在启动器中展示，不影响应用启动。安装将在后台继续。" --title="ACE环境安装" &
-        if ! aptss install -y "$ace_env_pkg"; then
-            echo "安装$ace_env_pkg失败"
-            return 1
+    local ace_cmd=""
+
+    # 根据配置找到对应命令
+    for ace_entry in "${ACE_ENVIRONMENTS[@]}"; do
+        if [ "${ace_entry#*:}" = "$ace_env_pkg" ]; then
+            ace_cmd="${ace_entry%%:*}"
+            break
         fi
+    done
+
+    # 如果命令存在，则说明环境已可用
+    if command -v "$ace_cmd" &>/dev/null; then
+        return 0
     fi
-    return 0
+
+    echo "ACE环境 $ace_env_pkg 未安装，正在尝试安装..."
+    zenity --info --text="首次使用 $ace_env_pkg 环境，重启或注销桌面后才能在启动器中展示，不影响应用启动。安装将在后台继续。" --title="ACE环境安装" &
+    if ! aptss install -y "$ace_env_pkg"; then
+        echo "安装 $ace_env_pkg 失败"
+        return 1
+    fi
+
+    # 再次确认命令
+    if command -v "$ace_cmd" &>/dev/null; then
+        return 0
+    else
+        echo "ACE环境 $ace_env_pkg 安装后未检测到命令 $ace_cmd"
+        return 1
+    fi
 }
+
 export user=$(who | awk '{print $1}' | head -n 1)
 # 在桌面创建快捷方式
 function create_desktop_file() {
@@ -270,19 +291,46 @@ function create_desktop_file() {
 export CURRENT_USER_DIR_DESKTOP=$(sudo -u "$user" xdg-user-dir DESKTOP)
 function exec_create_desktop_file() {
     local desktop_files=()
+    local package_name_lower=$(echo "$package_name" | tr '[:upper:]' '[:lower:]')
     
-    # 收集所有桌面文件
-    desktop_files+=($(dpkg -L "$package_name" | grep '/usr/share/applications/.*\.desktop$'))
-    desktop_files+=($(dpkg -L "$package_name" | grep '/opt/apps/'"$package_name"'/entries/applications/.*\.desktop$'))
+    # 只收集指定路径下的桌面文件
+    # 1. /usr/share/applications/ 目录下的 .desktop 文件
+    desktop_files+=($(dpkg -L "$package_name" 2>/dev/null | grep '^/usr/share/applications/.*\.desktop$' || true))
+    
+    # 2. /opt/apps/包名/entries/applications/ 目录下的 .desktop 文件
+    # 先尝试精确匹配包名路径
+    desktop_files+=($(dpkg -L "$package_name" 2>/dev/null | grep "^/opt/apps/$package_name/entries/applications/.*\.desktop$" || true))
+    
+    # 再尝试小写包名路径（有些包可能使用小写路径）
+    desktop_files+=($(dpkg -L "$package_name" 2>/dev/null | grep "^/opt/apps/$package_name_lower/entries/applications/.*\.desktop$" || true))
+    
+    # 如果没有找到任何符合条件的桌面文件，则直接返回
+    if [ ${#desktop_files[@]} -eq 0 ]; then
+        echo "未找到符合条件的桌面快捷方式文件（/usr/share/applications/ 或 /opt/apps/$package_name/entries/applications/）"
+        return 0
+    fi
+    
+    echo "找到 ${#desktop_files[@]} 个桌面快捷方式文件："
+    printf '%s\n' "${desktop_files[@]}"
     
     for desktop_file_path in "${desktop_files[@]}"; do
-        if [ "$FORCE_CREATE_DESKTOP" -eq 1 ] || [ -z "$(grep 'NoDisplay=true' "$desktop_file_path")" ]; then
-            echo "$desktop_file_path is checked and will be installed to desktop"
+        # 检查文件是否存在
+        if [ ! -f "$desktop_file_path" ]; then
+            echo "文件不存在，跳过: $desktop_file_path"
+            continue
+        fi
+        
+        # 检查是否是 NoDisplay=true 的桌面文件
+        if [ -z "$(grep -i 'NoDisplay=true' "$desktop_file_path")" ]; then
+            echo "安装桌面快捷方式: $desktop_file_path"
             chmod +x "$desktop_file_path"
-            sudo -u "$user" cp "$desktop_file_path" "${CURRENT_USER_DIR_DESKTOP}"
+            sudo -u "$user" cp "$desktop_file_path" "${CURRENT_USER_DIR_DESKTOP}/"
+        else
+            echo "跳过 NoDisplay=true 的桌面文件: $desktop_file_path"
         fi
     done
 }
+
 export -f exec_create_desktop_file
 
 # 在ACE环境中创建桌面快捷方式

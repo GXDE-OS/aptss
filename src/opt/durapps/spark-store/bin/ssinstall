@@ -85,8 +85,8 @@ case $(arch) in
 	STORE_LIST_URL=""
 	;;
    aarch64)
-	STORE_URL="aarch64-apm"
-	STORE_LIST_URL="-aarch64"
+	STORE_URL="arm64-apm"
+	STORE_LIST_URL="-arm64"
 	;;
    loongarch64)
    	STORE_URL="loong64-apm"
@@ -345,7 +345,7 @@ function create_desktop_in_ace() {
     fi
     
     # 如果是强制创建，或者没有配置禁止创建
-    if [ "$FORCE_CREATE_DESKTOP" -eq 1 ] || ! $ace_cmd "[ -e ~/.config/spark-union/spark-store/ssshell-config-do-not-create-desktop ]"; then
+    if [ "$FORCE_CREATE_DESKTOP" -eq 1 ] || !  [ -e ~/.config/spark-union/spark-store/ssshell-config-do-not-create-desktop ]; then
         echo "在ACE环境中创建桌面快捷方式..."
         export -f exec_create_desktop_file 
         export package_name
@@ -376,10 +376,10 @@ function install_in_ace_env() {
         $ace_cmd "ensure_aptss_exist"
 
     # 首先尝试dry-run测试
-    if ! $ace_cmd "aptss install --dry-run '$deb_path'"; then
+    if ! $ace_cmd aptss install --dry-run "$deb_path"; then
         echo "初始dry-run测试失败，尝试更新后重试..."
-        $ace_cmd "aptss update"
-        if ! $ace_cmd "aptss install --dry-run '$deb_path'"; then
+        $ace_cmd aptss update
+        if ! $ace_cmd aptss install --dry-run "$deb_path"; then
             echo "dry-run测试仍然失败，放弃安装"
             echo "OMG_IT_GOES_WRONG"
             return 1
@@ -387,8 +387,8 @@ function install_in_ace_env() {
     fi
     
     # dry-run成功后执行实际安装
-    $ace_cmd "aptss install store.spark-app.app-runtime-base --no-install-recommends -yfq"
-    if $ace_cmd "dpkg -i '$deb_path' || aptss install '$deb_path' -yfq"; then
+    $ace_cmd aptss install store.spark-app.app-runtime-base --no-install-recommends -yfq
+    if $ace_cmd  dpkg -i "$deb_path" || $ace_cmd aptss install "$deb_path" -yfq; then
         return 0
     else
         return 1

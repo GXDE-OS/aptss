@@ -1,10 +1,11 @@
-aptss (4.8.5) UNRELEASED; urgency=medium
+aptss (4.8.6) UNRELEASED; urgency=medium
 
   * 同步星火4.8.0
   * 支持riscv
   * 支持在安装应用的同时下载应用
   * 支持在APM下使用
   * 修复 aptss install 和 download 会留下垃圾文件的问题
+  * 修复 Ubuntu 26.04 容器下无法安装软件的问题
 
  -- shenmo <shenmo@spark-app.store>  Tue, 24 Sep 2024 00:32:58 +0800
 

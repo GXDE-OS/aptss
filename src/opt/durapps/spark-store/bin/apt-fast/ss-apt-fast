@@ -83,6 +83,9 @@ cleanup_aptfast()
   if [ -n "$LISTTEMP" ] && [ -d "$LISTTEMP" ]; then
     rm -rf "$LISTTEMP"
   fi
+  if [ -n "$tmpdir" ] && [ -d "$tmpdir" ]; then
+    rm -rf "$tmpdir"
+  fi
 }
 exit_cleanup_state()
 {
@@ -131,7 +134,6 @@ for argument in "$@"; do
   case "$argument" in
     upgrade | full-upgrade | install | dist-upgrade | build-dep)
       option="install"
-      _create_lock
       ;;
     clean | autoclean)
       option="clean"
@@ -310,6 +312,9 @@ https_proxy=
 [ "$TMP_http_proxy" = "$TMP_RANDOM" ] || http_proxy="$TMP_http_proxy"
 [ "$TMP_https_proxy" = "$TMP_RANDOM" ] || https_proxy="$TMP_https_proxy"
 
+if [ "$option" == "install" ]; then
+  _create_lock
+fi
 
 # Disable colors if not executed in terminal.
 if [ ! -t 1 ]; then
@@ -453,21 +458,11 @@ get_uris(){
     exit "$CLEANUP_STATE"
   fi
   prepare_auth
-  local tmpdir
   tmpdir=$(mktemp -d) || {
     msg "Failed to create tmp dir" "warning"
     msg "无法创建临时目录" "warning"
     exit 1
-
-  
   }
-
-cleanup_tmpdir() {
-  if [ -n "$tmpdir" ] && [ -d "$tmpdir" ]; then
-    rm -rf "$tmpdir"
-  fi
-}
-trap cleanup_tmpdir EXIT
   
   ## --print-uris format is:
   # 'fileurl' filename filesize checksum_hint:filechecksum

@@ -1,0 +1,4 @@
+#!/bin/bash
+TRANSHELL_CONTENT_RUNNING_IN_NOT_ROOT_USER="W:Rodando em modo não-root! Se ocorrer algum erro, tente rodar em modo root."
+TRANSHELL_CONTENT_INFO_SOURCES_LIST_D_IS_EMPTY="INFO：O Diretorio sources.list.d está vazio, não tentamos sincronizar"
+TRANSHELL_CONTENT_GETTING_SERVER_CONFIG_AND_MIRROR_LIST="Sincronizando os servidores e a lista de mirrors..."

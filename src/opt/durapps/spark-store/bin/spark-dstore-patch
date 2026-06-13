@@ -30,7 +30,7 @@ linkDir() {
 
         ensureTargetDir "$targetFile"
 	sourceFile=$(realpath --relative-to="$(dirname $targetFile)" "$sourceFile" )
-	if [  ! -e ${targetFile} ];then
+	if [  ! -e "${targetFile}" ];then
         ln -sv "$sourceFile" "$targetFile"
         fi
     done
@@ -88,7 +88,7 @@ done
 }
 
 function exec_link_clean(){
-# remove broken links in /usr/share
+    # remove broken links in /usr/share
 
     find /usr/share/applications -xtype l -exec echo '{} is invalid now and going to be cleaned' \; -exec unlink  {} \; 2>/dev/null &
     find /usr/share/icons -xtype l -exec echo '{} is invalid now and going to be cleaned' \; -exec unlink  {} \; 2>/dev/null &
@@ -98,13 +98,32 @@ function exec_link_clean(){
     find /usr/share/fcitx -xtype l -exec echo '{} is invalid now and going to be cleaned' \; -exec unlink  {} \; 2>/dev/null &
     find /usr/share/help -xtype l -exec echo '{} is invalid now and going to be cleaned' \; -exec unlink  {} \; 2>/dev/null &
     find /usr/share/locale -xtype l -exec echo '{} is invalid now and going to be cleaned' \; -exec unlink  {} \; 2>/dev/null &
-    find /usr/lib/`dpkg-architecture -qDEB_HOST_MULTIARCH`/fcitx -xtype l -exec echo '{} is invalid now and going to be cleaned' \; -exec unlink  {} \; 2>/dev/null &
+
+    # 根据 uname -m 确定 multiarch 目录名
+    arch=$(uname -m)
+    case $arch in
+        x86_64)
+            multiarch="x86_64-linux-gnu"
+            ;;
+        aarch64)
+            multiarch="aarch64-linux-gnu"
+            ;;
+        loongarch64|loong64)
+            multiarch="loongarch64-linux-gnu"
+            ;;
+        *)
+            multiarch=""
+            ;;
+    esac
+
+    if [ -n "$multiarch" ]; then
+        find "/usr/lib/$multiarch/fcitx" -xtype l -exec echo '{} is invalid now and going to be cleaned' \; -exec unlink  {} \; 2>/dev/null &
+    fi
+
     find /usr/lib/mozilla/plugins -xtype l -exec echo '{} is invalid now and going to be cleaned' \; -exec unlink  {} \; 2>/dev/null &
     find /usr/share/polkit-1/actions -xtype l -exec echo '{} is invalid now and going to be cleaned' \; -exec unlink  {} \; 2>/dev/null &
     find /usr/share/fonts -xtype l -exec echo '{} is invalid now and going to be cleaned' \; -exec unlink  {} \; 2>/dev/null &
     find /etc/fonts/conf.d -xtype l -exec echo '{} is invalid now and going to be cleaned' \; -exec unlink  {} \; 2>/dev/null &
-
-
 }
 function exec_uos_package_update(){
     update-icon-caches /usr/share/icons/* > /dev/null 2>&1 &

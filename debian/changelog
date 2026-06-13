@@ -1,3 +1,11 @@
+aptss (5.0.0) UNRELEASED; urgency=medium
+
+  * 同步星火5.x
+  * 支持pt_BR
+
+
+ -- shenmo <shenmo@spark-app.store>  Tue, 24 Sep 2024 00:32:58 +0800
+
 aptss (4.8.6) UNRELEASED; urgency=medium
 
   * 同步星火4.8.0

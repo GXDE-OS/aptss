@@ -1,4 +1,5 @@
-#!/bin/bash
-TRANSHELL_CONTENT_RUNNING_IN_NOT_ROOT_USER="W:Rodando em modo não-root! Se ocorrer algum erro, tente rodar em modo root."
-TRANSHELL_CONTENT_INFO_SOURCES_LIST_D_IS_EMPTY="INFO：O Diretorio sources.list.d está vazio, não tentamos sincronizar"
-TRANSHELL_CONTENT_GETTING_SERVER_CONFIG_AND_MIRROR_LIST="Sincronizando os servidores e a lista de mirrors..."
+# pt_BR translations
+TRANSHELL_CONTENT_RUNNING_IN_NOT_ROOT_USER_PT_BR="Informação: Iniciando em modo sem privilégios root! Se ocorrerem problemas, tente executar o comando com privilégios de root."
+TRANSHELL_CONTENT_INFO_SOURCES_LIST_D_IS_EMPTY_PT_BR="Informação: A pasta sources.list.d está vazia. Nenhuma sincronização será tentada."
+TRANSHELL_CONTENT_GETTING_SERVER_CONFIG_AND_MIRROR_LIST_PT_BR="Obtendo configuração do servidor e lista de espelhos..."
+TRANSHELL_CONTENT_PLEASE_USE_APTSS_INSTEAD_OF_APT_PT_BR="Aviso: Embora a mensagem de erro sugira usar apt (ex.: apt install --fix-broken) para corrigir o problema, ao depurar o erro, utilize aptss no lugar (no exemplo, use aptss install --fix-broken)."

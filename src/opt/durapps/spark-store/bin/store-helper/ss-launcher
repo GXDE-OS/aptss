@@ -61,7 +61,7 @@ function launch_app() {
     # 提取并净化Exec命令
     exec_command=$(grep -m1 '^Exec=' "$DESKTOP_FILE_PATH" | cut -d= -f2- | sed 's/%.//g')
     [ -z "$exec_command" ] && return 1
-    [ ! -z "$IS_ACE_ENV" ] && HOST_PREFIX="host-spawn"
+    [ ! -z "$IS_ACE_ENV" ] && HOST_PREFIX="systemd-run --user"
     exec_command="${HOST_PREFIX} $exec_command"
     log.info "Launching: $exec_command"
     ${SHELL:-bash} -c " $exec_command"  &

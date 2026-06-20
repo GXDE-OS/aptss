@@ -32,3 +32,4 @@ for username in `ls /home`
 
 	# Clean the auto install polkit file if it exists
 	rm -f /usr/share/polkit-1/actions/store.spark-app.ssinstall.policy
+fi

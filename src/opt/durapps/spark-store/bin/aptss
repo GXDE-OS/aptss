@@ -96,7 +96,7 @@ update_conf
 fi
 
 
-if [ ! -e "/var/lib/aptss/lists/${SPARK_DOWNLOAD_SERVER_URL_NO_PROTOCOL}_${STORE_URL}_Packages" ] && [ ! -e "/var/lib/aptss/lists/d.store.deepinos.org.cn_${STORE_URL}_Packages" ] && [ ! -e "/var/lib/aptss/lists/mirrors.sdu.edu.cn_spark-store-repository_${STORE_URL}_Packages" ];then
+if [ ! -e "/var/lib/aptss/lists/${SPARK_DOWNLOAD_SERVER_URL_NO_PROTOCOL}_${STORE_URL}_Packages" ] && [ ! -e "/var/lib/aptss/lists/${SPARK_DOWNLOAD_SERVER_URL_NO_PROTOCOL}_aarch64-store_Packages" ] && [ ! -e "/var/lib/aptss/lists/${SPARK_DOWNLOAD_SERVER_URL_NO_PROTOCOL}_store_Packages" ];then
 
 mkdir -p /tmp/aptss-conf/
 echo -e "\e[1;32m${TRANSHELL_CONTENT_GETTING_SERVER_CONFIG_AND_MIRROR_LIST}\e[0m"

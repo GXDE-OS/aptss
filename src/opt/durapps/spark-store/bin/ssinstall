@@ -62,11 +62,11 @@ export DEBIAN_FRONTEND=noninteractive
 if [[ "$IS_APM_ENV" = "" ]] ;then
 case $(arch) in
   x86_64 | i686 | i386)
-	STORE_URL="store"
+	STORE_URL="amd64-store"
 	STORE_LIST_URL=""
 	;;
    aarch64)
-	STORE_URL="aarch64-store"
+	STORE_URL="arm64-store"
 	STORE_LIST_URL="-aarch64"
 	;;
    loongarch64)
@@ -195,10 +195,13 @@ function hash_check() {
     # 检查可能的仓库位置
     if [ -e "/var/lib/aptss/lists/${SPARK_DOWNLOAD_SERVER_URL_NO_PROTOCOL}_${STORE_URL}_Packages" ]; then
         PACKAGES_DATA_PATH="/var/lib/aptss/lists/${SPARK_DOWNLOAD_SERVER_URL_NO_PROTOCOL}_${STORE_URL}_Packages"
-    elif [ -e "/var/lib/aptss/lists/d.store.deepinos.org.cn_${STORE_URL}_Packages" ]; then
-        PACKAGES_DATA_PATH="/var/lib/aptss/lists/d.store.deepinos.org.cn_${STORE_URL}_Packages"
-    else
-        PACKAGES_DATA_PATH="/var/lib/aptss/lists/mirrors.sdu.edu.cn_spark-store-repository_${STORE_URL}_Packages"
+    elif [ -e "/var/lib/aptss/lists/${SPARK_DOWNLOAD_SERVER_URL_NO_PROTOCOL}_store_Packages" ]; then
+        PACKAGES_DATA_PATH="/var/lib/aptss/lists/${SPARK_DOWNLOAD_SERVER_URL_NO_PROTOCOL}_store_Packages"
+    elif [ -e "/var/lib/aptss/lists/${SPARK_DOWNLOAD_SERVER_URL_NO_PROTOCOL}_aarch64-store_Packages" ]; then
+        PACKAGES_DATA_PATH="/var/lib/aptss/lists/${SPARK_DOWNLOAD_SERVER_URL_NO_PROTOCOL}_aarch64-store_Packages"
+    else 
+        echo "ERROR:NO_PACKAGE_FILE_FOUND!"
+        exit 1
     fi
 
     echo "正在运行包验证..."

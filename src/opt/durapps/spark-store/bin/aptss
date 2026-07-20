@@ -16,11 +16,11 @@ load_transhell
 if [[ "$IS_APM_ENV" = "" ]] ;then
 case $(arch) in
    x86_64 | i686 | i386)
-	STORE_URL="store"
+	STORE_URL="amd64-store"
 	STORE_LIST_URL=""
 	;;
    aarch64)
-	STORE_URL="aarch64-store"
+	STORE_URL="arm64-store"
 	STORE_LIST_URL="-aarch64"
 	;;
    loongarch64)

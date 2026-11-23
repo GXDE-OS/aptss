@@ -1,3 +1,11 @@
+aptss (5.0.1-1) UNRELEASED; urgency=medium
+
+  * 下载进度改为 APM 风格的单行显示：任务序号、进度条、速度、
+    服务器数和连接数；aria2 RPC 读取真实进度。
+  * aria2 RPC 初始化失败时保持原来的 aria2c 下载行为。
+
+ -- shenmo <shenmo@spark-app.store>  Mon, 23 Nov 2026 19:15:00 +0800
+
 aptss (5.0.0-1) UNRELEASED; urgency=medium
 
   [ shenmo ]

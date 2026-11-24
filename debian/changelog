@@ -1,3 +1,11 @@
+aptss (5.0.1-2) UNRELEASED; urgency=medium
+
+  * ss-apt-fast-progress 增加 APTSS_PROGRESS_FORMAT=json：
+    从 aria2 RPC 输出机器可读进度，供控制中心等调用方读取，
+    不再依赖 TTY/ANSI 文本解析。
+
+ -- shenmo <shenmo@spark-app.store>  Tue, 24 Nov 2026 18:40:00 +0800
+
 aptss (5.0.1-1) UNRELEASED; urgency=medium
 
   * 下载进度改为 APM 风格的单行显示：任务序号、进度条、速度、
